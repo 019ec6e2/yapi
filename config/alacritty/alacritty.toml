@@ -1,0 +1,87 @@
+# Treat Option as Meta so tmux can see Ctrl+Option+<key> combos (e.g. C-M-h pane focus)
+[window]
+option_as_alt = "Both"
+
+# --- Ayu Dark (base16-ayu-dark, matches tinted-tmux + ayu-vim) ---
+[colors]
+[colors.primary]
+foreground = "#bfbdb6"   # v2 ayu editor fg (matches ayu2.vim Normal fg)
+background = "#0b0e14"   # base00
+
+[colors.cursor]
+text = "#0b0e14"         # base00
+cursor = "#bfbdb6"       # v2 ayu editor fg
+
+[colors.selection]
+text = "#e6e1cf"         # base05
+background = "#202229"   # base02
+
+[colors.normal]
+black   = "#0b0e14"      # base00
+red     = "#f07178"      # base08
+green   = "#aad94c"      # base0B
+yellow  = "#ffb454"      # base0A
+blue    = "#59c2ff"      # base0D
+magenta = "#d2a6ff"      # base0E
+cyan    = "#95e6cb"      # base0C
+white   = "#e6e1cf"      # base05
+
+[colors.bright]
+black   = "#3e4b59"      # base03
+red     = "#f07178"      # base08
+green   = "#aad94c"      # base0B
+yellow  = "#ffb454"      # base0A
+blue    = "#59c2ff"      # base0D
+magenta = "#d2a6ff"      # base0E
+cyan    = "#95e6cb"      # base0C
+white   = "#f2f0e7"      # base07
+
+[colors.dim]
+black   = "#0b0e14"      # base00
+red     = "#f07178"      # base08
+green   = "#aad94c"      # base0B
+yellow  = "#ffb454"      # base0A
+blue    = "#59c2ff"      # base0D
+magenta = "#d2a6ff"      # base0E
+cyan    = "#95e6cb"      # base0C
+white   = "#e6e1cf"      # base05
+
+# Extended base16 slots so dim/cursor/other indexed lookups stay on-scheme
+[[colors.indexed_colors]]
+index = 16
+color = "#ff8f40"   # base09
+
+[[colors.indexed_colors]]
+index = 17
+color = "#e6b450"   # base0F
+
+[[colors.indexed_colors]]
+index = 18
+color = "#131721"   # base01
+
+[[colors.indexed_colors]]
+index = 19
+color = "#202229"   # base02
+
+[[colors.indexed_colors]]
+index = 20
+color = "#bfbdb6"   # base04
+
+[[colors.indexed_colors]]
+index = 21
+color = "#ece8db"   # base06
+
+[font]
+size = 14.0
+
+[font.normal]
+family = "Liga SFMono Nerd Font"
+style = "Regular"
+
+[font.bold]
+family = "Liga SFMono Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "Liga SFMono Nerd Font"
+style = "Italic"

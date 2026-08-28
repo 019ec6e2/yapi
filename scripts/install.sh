@@ -78,6 +78,8 @@ link_configs() {
     backup_and_link "$REPO_ROOT/config/yazi/$file" "$HOME/.config/yazi/$file"
   done
 
+  backup_and_link "$REPO_ROOT/config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
+
   backup_and_link "$REPO_ROOT/config/pi/settings.json" "$HOME/.pi/agent/settings.json"
   backup_and_link "$REPO_ROOT/config/pi/models.json" "$HOME/.pi/agent/models.json"
   backup_and_link "$REPO_ROOT/config/pi/themes/ayu.json" "$HOME/.pi/agent/themes/ayu.json"

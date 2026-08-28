@@ -7,6 +7,11 @@ shell '~/.config/yazi/open-in-vim.sh %s'
 desc = "Open in existing tmux vim pane"
 
 [[mgr.prepend_keymap]]
+on   = [ "F" ]
+run  = "create --dir"
+desc = "New folder"
+
+[[mgr.prepend_keymap]]
 on   = [ "o" ]
 run  = '''
 shell '~/.config/yazi/open-in-vim.sh %s'

@@ -2,4 +2,5 @@
 brew "tmux"
 brew "vim"
 brew "yazi"
+brew "alacritty"
 brew "node"
