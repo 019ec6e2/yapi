@@ -1,0 +1,14 @@
+# Open selection in the existing vim pane of the current tmux window
+[[mgr.prepend_keymap]]
+on   = [ "O" ]
+run  = '''
+shell '~/.config/yazi/open-in-vim.sh %s'
+'''
+desc = "Open in existing tmux vim pane"
+
+[[mgr.prepend_keymap]]
+on   = [ "o" ]
+run  = '''
+shell '~/.config/yazi/open-in-vim.sh %s'
+'''
+desc = "Open in existing tmux vim pane"

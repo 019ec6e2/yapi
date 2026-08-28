@@ -1,0 +1,221 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" Set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" Plugin List
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tomlion/vim-solidity'
+Plugin 'tpope/vim-fugitive'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'Chiel92/vim-autoformat'
+Plugin 'preservim/nerdcommenter'  " Updated to current organization
+Plugin 'preservim/nerdtree'       " Maintained version
+Plugin 'chrisbra/Colorizer'
+Plugin 'prettier/vim-prettier'
+Plugin 'chriskempson/base16-vim'
+Plugin 'dense-analysis/ale'
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+" --- General UI & Editor Behavior ---
+syntax on                    " required for syntax highlighting (terminal + tmux)
+set autochdir
+set linespace=5
+set noswapfile
+set guifont="IBM Plex Sans":h14
+set number
+set relativenumber
+set showmode
+set clipboard=unnamed
+set hidden
+set hls
+set backupcopy=yes
+" Enable true color inside tmux (tmux-256color terminfo lacks RGB cap)
+if !has('gui_running')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+set termguicolors
+set background=dark
+set ignorecase
+set smartcase
+
+" --- Redraw / syntax performance ---
+set redrawtime=10000      " give syntax engine more time before giving up
+set synmaxcol=300         " don't highlight absurdly long lines
+set lazyredraw            " don't redraw mid-macro/command
+" ROOT CAUSE of the 'hang on (' + 'redrawtime exceeded': with the default
+" regexpengine=0 (auto), vim picks the OLD backtracking engine for some
+" TypeScript syntax patterns -> catastrophic backtracking (4s+ CPU per
+" keystroke on lines with call chains). Forcing the NFA engine fixes it.
+" Verified: full config typing 'sha256(' at a call-chain line:
+" re=0 -> 4.5s CPU/keystroke, re=2 -> 0.01s. NEVER set re=1.
+set regexpengine=2
+
+" matchparen searches via the (slow) syntax engine on every '(' keystroke.
+" Cap it so it can never hang; 0 = give up immediately in insert mode.
+" NOTE: 0 means NO timeout (search forever) -> must be a positive ms value.
+let g:matchparen_timeout = 20
+let g:matchparen_insert_timeout = 20
+" If it still lags, disable matchparen entirely by uncommenting:
+" let g:loaded_matchparen = 1
+
+" Persistent Undo Settings
+set undodir=~/.vim/undodir
+set undofile
+
+" Clean MacVim GUI (No ugly scrollbars)
+set guioptions=
+set guioptions+=a
+set guioptions+=m
+
+" --- Indentation Settings ---
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent                  " Cleared redundant 'ai', 'smartindent', and 'cindent'
+filetype plugin indent on       " Let Vim handle filetype-specific indents safely
+
+" --- Plugin Configurations ---
+" Color theme — ayu v2 (ayu2.vim, port of Shatur/neovim-ayu palette;
+" matches tinted-tmux base16-ayu-dark and the alacritty palette)
+colorscheme ayu2
+
+" Vim-Airline
+let g:airline_theme='ayu2'
+let g:airline#extensions#tabline#enabled = 1
+" Cache airline highlight groups. Without this, airline re-derives and
+" re-executes ~1000s of :hi commands on EVERY keystroke (verified via
+" -V12 log: 5000+ airline#highlighter calls per few chars typed) -> the
+" 'hang on (' and the original redrawtime-exceeded symptom.
+let g:airline_highlighting_cache = 1
+
+" Prettier (Fixed deprecated 'babylon' parser)
+let g:prettier#config#parser = 'babel'
+let g:prettier#quickfix_enabled = 1
+let g:prettier#config#tab_width = 4
+
+" CtrlP Setup
+let g:ctrlp_cmd = 'CtrlPMRU'
+
+" Other Plugin Variables
+let g:session_autosave = 'yes'
+let g:session_autoload = 'yes'
+let g:jsx_ext_required = 0
+let g:color_is_highlight = 0
+
+" OCaml indent path (when opam and ocp-indent are installed)
+if executable('opam')
+  let s:opam_share = trim(system('opam var share 2>/dev/null'))
+  if v:shell_error == 0 && isdirectory(s:opam_share . '/ocp-indent/vim')
+    execute 'set rtp^=' . fnameescape(s:opam_share . '/ocp-indent/vim')
+  endif
+endif
+
+" Language / Keymap Layouts
+set keymap=russian-jcukenwin
+set iminsert=0
+set imsearch=0
+highlight lCursor guifg=NONE guibg=Cyan
+
+" --- Autocommands ---
+" Automatically open NERDTree on launch and prevent accidental closing (MacVim only)
+if has('gui_running')
+  autocmd VimEnter * NERDTree | wincmd p
+  autocmd FileType nerdtree cnoreabbrev <buffer> bd <nop>
+  " update nerdtree on write
+  autocmd BufWritePost * NERDTreeFocus | execute 'normal r' | wincmd p
+endif
+
+" --- Keybindings ---
+" Fast buffer navigation & management
+nnoremap ! :bp\|bd #<CR>
+nnoremap <Tab> :bn<CR>
+
+" Window navigation (Jump between NERDTree and main files)
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Map NerdCommenter to Cmd+0
+nnoremap <D-0> :call NERDComment(0,"toggle")<CR>
+vnoremap <D-0> :call NERDComment(0,"toggle")<CR>
+
+" Bind Prettier to F12
+noremap <F12> :Prettier<CR>
+
+" Format current file lines with F8
+noremap <F8> :keepjumps normal! gg=G<CR>
+
+" Toggle HEX Color highlight
+nnoremap <F7> :call ColorHighlightToggle()<cr>
+
+" Paste over selection without losing current clipboard item
+xnoremap p "_dP
+
+" Emmet macro trigger
+imap <expr> <D-ESC> emmet#expandAbbrIntelligent("\±")
+
+" --- Custom Functions ---
+function! ColorHighlightToggle()
+    if g:color_is_highlight
+        execute "ColorClear"
+        let g:color_is_highlight = 0
+    else
+        execute "ColorHighlight"
+        let g:color_is_highlight = 1
+    endif
+endfunction
+
+
+" --- ALE Async Linting & Language Server Configuration ---
+" Assign explicit linters to prevent background process bloat
+let g:ale_linters = {
+\   'rust': ['analyzer', 'cargo'],
+\   'typescript': ['eslint'],
+\   'typescriptreact': ['eslint'],
+\   'python': ['ruff', 'flake8']
+\}
+
+" tsserver (LSP) stalls the UI on '(' while it resolves the whole project's
+" type graph. Disable ALE's LSP features entirely; use eslint for diagnostics
+" and run `tsc --watch` in a terminal for type errors.
+let g:ale_disable_lsp = 1
+
+" Interface and UI custom tweaks for MacVim gutter
+let g:ale_sign_column_always = 1          " Keep sign column open to prevent window jerking
+let g:ale_sign_error = '❌'               " Modern emoji flags for lines with errors
+let g:ale_sign_warning = '⚠️'             " Modern emoji flags for lines with warnings
+
+" Performance optimizations
+let g:ale_lint_on_text_changed = 'never'  " Do not lint while actively typing (stops latency)
+let g:ale_lint_on_insert_leave = 1        " Lint immediately when leaving Insert Mode
+let g:ale_lint_on_enter = 1               " Lint as soon as you open a buffer
+
+" Tabline integration: Let vim-airline capture ALE errors automatically
+let g:airline#extensions#ale#enabled = 1
+
+" Essential LSP Navigation shortcuts for Rust and TS
+nnoremap gd :ALEGoToDefinition<CR>
+nnoremap gr :ALEFindReferences<CR>
+nnoremap K :ALEHover<CR>
+
+
+" Use the project-local eslint/tsserver from node_modules/.bin (ALE auto-finds
+" them when use_global = 0). No need to invoke node manually.
+let g:ale_javascript_eslint_use_global = 0
+let g:ale_typescript_tsserver_use_global = 0
+
+" strip trailing white spaces
+autocmd BufWritePre * keepjumps keeppatterns %s/\s\+$//e
+
+
+" add mouse support in command line
+set mouse=a

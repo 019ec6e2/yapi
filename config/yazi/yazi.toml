@@ -1,0 +1,5 @@
+# Tuned for use inside a narrow full-height tmux pane (see ~/.config/omarchy/tmux-layouts.zsh)
+# ratio = parent, current, preview — 0 hides a pane entirely,
+# so this shows only the current directory listing (single-column).
+[mgr]
+ratio = [0, 1, 0]

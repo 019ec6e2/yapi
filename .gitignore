@@ -1,0 +1,31 @@
+# OS and editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Environment and credentials
+.env
+.env.*
+!.env.example
+**/auth.json
+**/trust.json
+**/*credentials*.json
+*.pem
+*.key
+
+# Generated/runtime state
+*.log
+sessions/
+cache/
+models-store.json
+node_modules/
+
+# Plugin and Vim runtime state
+.vim/bundle/
+.vim/undodir/
+.vim/sessions/
+.vim/autosess/
+.tmux/plugins/
