@@ -3,6 +3,15 @@
 option_as_alt = "Both"
 
 # --- Ayu Dark (base16-ayu-dark, matches tinted-tmux + ayu-vim) ---
+[cursor]
+# Blink even when apps (e.g. vim inside tmux) don't request it via DECSCUSR
+style = { shape = "Block", blinking = "Always" }
+blink_interval = 450   # ms between blinks
+blink_timeout = 0      # 0 = never stop blinking on inactivity
+
+[cursor.vi_mode_style]
+blinking = "Always"
+
 [colors]
 [colors.primary]
 foreground = "#bfbdb6"   # v2 ayu editor fg (matches ayu2.vim Normal fg)
