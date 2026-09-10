@@ -2,5 +2,9 @@
   "theme": "ayu",
   "defaultProvider": "openrouter",
   "defaultModel": "z-ai/glm-5.3-flash",
-  "lastChangelogVersion": "0.84.3"
+  "lastChangelogVersion": "0.84.4",
+  "packages": [
+    "npm:pi-edit-session-in-place",
+    "npm:pi-web-access"
+  ]
 }
