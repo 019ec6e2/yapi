@@ -1,44 +1,37 @@
-# Create a Tmux Dev Layout with editor, ai, and terminal
+# Create a Tmux Dev Layout with yazi, two AI panes, and terminal
 # Usage: tdl <c|cx|codex|other_ai> [<second_ai>]
 tdl() {
   [[ -z $1 ]] && { echo "Usage: tdl <c|cx|codex|other_ai> [<second_ai>]"; return 1; }
   [[ -z $TMUX ]] && { echo "You must start tmux to use tdl."; return 1; }
 
   local current_dir="${PWD}"
-  local editor_pane ai_pane ai2_pane terminal_pane yazi_pane
+  local ai_pane ai2_pane terminal_pane yazi_pane
   local ai="$1"
   local ai2="$2"
 
   # Use TMUX_PANE for the pane we're running in (stable even if active window changes)
-  editor_pane="$TMUX_PANE"
+  ai_pane="$TMUX_PANE"
 
   # Name the current window after the base directory name
-  tmux rename-window -t "$editor_pane" "$(basename "$current_dir")"
+  tmux rename-window -t "$ai_pane" "$(basename "$current_dir")"
 
-  # Split editor pane horizontally, placing yazi in a full-height leftmost vertical pane (20% wide)
-  yazi_pane=$(tmux split-window -h -b -p 20 -t "$editor_pane" -c "$current_dir" -P -F '#{pane_id}')
+  # Split horizontally, placing yazi in a full-height leftmost vertical pane (20% wide)
+  yazi_pane=$(tmux split-window -h -b -p 20 -t "$ai_pane" -c "$current_dir" -P -F '#{pane_id}')
   tmux send-keys -t "$yazi_pane" "yazi" C-m
 
-  # Split editor pane vertically - bottom 15% for the terminal
-  terminal_pane=$(tmux split-window -v -p 15 -t "$editor_pane" -c "$current_dir" -P -F '#{pane_id}')
+  # Split vertically - bottom 15% for the terminal
+  terminal_pane=$(tmux split-window -v -p 15 -t "$ai_pane" -c "$current_dir" -P -F '#{pane_id}')
 
-  # Split editor pane horizontally - AI on right 30% of the remaining editor area (capture new pane ID directly)
-  ai_pane=$(tmux split-window -h -p 30 -t "$editor_pane" -c "$current_dir" -P -F '#{pane_id}')
+  # Split the remaining area into two equally sized AI panes side by side;
+  # second runs ai2 if given, otherwise the same AI
+  ai2_pane=$(tmux split-window -h -p 50 -t "$ai_pane" -c "$current_dir" -P -F '#{pane_id}')
+  tmux send-keys -t "$ai2_pane" "${ai2:-$ai}" C-m
 
-  # If second AI provided, split the AI pane vertically
-  if [[ -n $ai2 ]]; then
-    ai2_pane=$(tmux split-window -v -t "$ai_pane" -c "$current_dir" -P -F '#{pane_id}')
-    tmux send-keys -t "$ai2_pane" "$ai2" C-m
-  fi
-
-  # Run ai in the right pane
+  # Run ai in the first pane
   tmux send-keys -t "$ai_pane" "$ai" C-m
 
-  # Run nvim in the left pane
-  tmux send-keys -t "$editor_pane" "$EDITOR ." C-m
-
-  # Select the editor pane for focus
-  tmux select-pane -t "$editor_pane"
+  # Select the first AI pane for focus
+  tmux select-pane -t "$ai_pane"
 }
 
 # Create a Tmux Dev Square layout with editor, diff watch, terminal, and opencode
