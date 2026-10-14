@@ -1,6 +1,7 @@
 # Treat Option as Meta so tmux can see Ctrl+Option+<key> combos (e.g. C-M-h pane focus)
 [window]
 option_as_alt = "Both"
+padding = { x = 8, y = 8 }
 
 # --- Ayu Dark (base16-ayu-dark, matches tinted-tmux + ayu-vim) ---
 [cursor]
