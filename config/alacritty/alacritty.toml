@@ -84,14 +84,23 @@ color = "#ece8db"   # base06
 [font]
 size = 14.0
 
+# Berkeley Mono patched with Nerd Font icons (font-patcher --complete --mono)
+# Lives in ~/Library/Fonts/berkeley-nerd/; the originals in ~/Library/Fonts stay untouched.
+# All four styles now form one RIBBI family, so point every slot at it.
+# NOTE: Berkeley Mono names its slanted face "Oblique", not "Italic" —
+# crossfont matches style names literally, so "Italic" silently never matches.
 [font.normal]
-family = "Berkeley Mono"
+family = "BerkeleyMono Nerd Font Mono"
 style = "Regular"
 
 [font.bold]
-family = "Berkeley Mono"
+family = "BerkeleyMono Nerd Font Mono"
 style = "Bold"
 
 [font.italic]
-family = "Berkeley Mono"
-style = "Italic"
+family = "BerkeleyMono Nerd Font Mono"
+style = "Oblique"
+
+[font.bold_italic]
+family = "BerkeleyMono Nerd Font Mono"
+style = "Bold Oblique"
