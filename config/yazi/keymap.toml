@@ -1,8 +1,10 @@
-# Open selection in the existing vim pane of the current tmux window
+# Open selection in the existing vim pane of the current tmux window.
+# Yazi's `shell` does not populate "$@"; `%s` splats the selected files
+# (falling back to the hovered file) with shell escaping applied.
 [[mgr.prepend_keymap]]
 on   = [ "O" ]
 run  = '''
-shell --block '~/.config/yazi/open-in-vim.sh "$@"'
+shell --block '~/.config/yazi/open-in-vim.sh %s'
 '''
 desc = "Open in existing tmux vim pane"
 
@@ -14,6 +16,6 @@ desc = "New folder"
 [[mgr.prepend_keymap]]
 on   = [ "o" ]
 run  = '''
-shell --block '~/.config/yazi/open-in-vim.sh "$@"'
+shell --block '~/.config/yazi/open-in-vim.sh %s'
 '''
 desc = "Open in existing tmux vim pane"
