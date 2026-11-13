@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "local-mcp": {
+      "disabled": true
+    },
+    "surfpool": {
+      "disabled": true
+    }
+  }
+}

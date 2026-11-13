@@ -2,7 +2,7 @@
 [[mgr.prepend_keymap]]
 on   = [ "O" ]
 run  = '''
-shell '~/.config/yazi/open-in-vim.sh %s'
+shell --block '~/.config/yazi/open-in-vim.sh "$@"'
 '''
 desc = "Open in existing tmux vim pane"
 
@@ -14,6 +14,6 @@ desc = "New folder"
 [[mgr.prepend_keymap]]
 on   = [ "o" ]
 run  = '''
-shell '~/.config/yazi/open-in-vim.sh %s'
+shell --block '~/.config/yazi/open-in-vim.sh "$@"'
 '''
 desc = "Open in existing tmux vim pane"

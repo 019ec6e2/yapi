@@ -5,6 +5,10 @@
   "lastChangelogVersion": "0.84.4",
   "packages": [
     "npm:pi-edit-session-in-place",
-    "npm:pi-web-access"
+    "npm:pi-web-access",
+    "npm:pi-subagents",
+    "npm:pi-mcp-adapter",
+    "npm:@ff-labs/pi-fff",
+    "npm:@xamfoo/pi-openrouter-pin"
   ]
 }

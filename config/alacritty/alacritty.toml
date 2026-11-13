@@ -85,13 +85,13 @@ color = "#ece8db"   # base06
 size = 14.0
 
 [font.normal]
-family = "Liga SFMono Nerd Font"
+family = "Berkeley Mono"
 style = "Regular"
 
 [font.bold]
-family = "Liga SFMono Nerd Font"
+family = "Berkeley Mono"
 style = "Bold"
 
 [font.italic]
-family = "Liga SFMono Nerd Font"
+family = "Berkeley Mono"
 style = "Italic"
